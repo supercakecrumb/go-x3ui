@@ -4,8 +4,8 @@ import (
 	"log"
 	"log/slog"
 
+	"github.com/supercakecrumb/go-x3ui/client"
 	"github.com/supercakecrumb/go-x3ui/config"
-	"github.com/supercakecrumb/go-x3ui/internal/client"
 )
 
 func main() {

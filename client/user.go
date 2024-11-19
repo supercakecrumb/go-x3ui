@@ -54,8 +54,8 @@ func (c *Client) AddInboundClient(inboundID int, clientConfig InboundClient) err
 	return nil
 }
 
-// GenerateDefaultConfig creates a default client configuration for adding a client
-func (c *Client) GenerateDefaultConfig(email string, tgID int64) InboundClient {
+// GenerateDefaultInboundClient creates a default client configuration for adding a client
+func (c *Client) GenerateDefaultInboundClient(email string, tgID int64) InboundClient {
 	return InboundClient{
 		ID:         uuid.NewString(),
 		Flow:       "xtls-rprx-vision",

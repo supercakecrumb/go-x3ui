@@ -28,3 +28,8 @@ curl --location --request POST "$BASE_URL/panel/inbound/onlines" \
      --header "Accept: application/json" \
      --http1.1 --insecure \
      --cookie $COOKIE_FILE | jq
+
+curl --request POST https://localhost:2053/server/getNewX25519Cert \
+    --header "Accept: application/x-www-form-urlencoded" \
+    --http1.1 --insecure \
+    --cookie $COOKIE_FILE

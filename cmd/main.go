@@ -43,10 +43,25 @@ func main() {
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
 
-	inboundClient := c.GenerateDefaultConfig("test", 1234)
-	err = c.AddClient(2, inboundClient)
+	// inboundClient := c.GenerateDefaultConfig("test", 1234)
+	// err = c.AddInboundClient(2, inboundClient)
+	// if err != nil {
+	// 	logger.Error("Creating client failed", slog.String("error", err.Error()))
+	// 	return
+	// }
+
+	// Generate default inbound configuration
+	defaultInbound, err := c.GenerateDefaultInboundConfig("tori.fi", "178.236.244.241", 444)
 	if err != nil {
-		logger.Error("Creating client failed", slog.String("error", err.Error()))
+		logger.Error("Failed to generate default inbound config", "error", err)
 		return
 	}
+
+	// Add the inbound
+	err = c.AddInbound(defaultInbound)
+	if err != nil {
+		logger.Error("Failed to add inbound", "error", err)
+		return
+	}
+
 }

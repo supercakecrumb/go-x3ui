@@ -66,3 +66,73 @@ type InboundClient struct {
 	SubID      string `json:"subId"`
 	Reset      int    `json:"reset"`
 }
+
+// AddInboundPayload represents the payload for the Add Inbound API
+type AddInboundPayload struct {
+	Up             int64  `json:"up"`
+	Down           int64  `json:"down"`
+	Total          int64  `json:"total"`
+	Remark         string `json:"remark"`
+	Enable         bool   `json:"enable"`
+	ExpiryTime     int64  `json:"expiryTime"`
+	Listen         string `json:"listen"`
+	Port           int    `json:"port"`
+	Protocol       string `json:"protocol"`
+	Settings       string `json:"settings"`       // JSON string
+	StreamSettings string `json:"streamSettings"` // JSON string
+	Sniffing       string `json:"sniffing"`       // JSON string
+	Allocate       string `json:"allocate"`       // JSON string
+}
+
+// AddInboundSettings represents the parsed settings for an inbound
+type AddInboundSettings struct {
+	Clients    []Client `json:"clients"`
+	Decryption string   `json:"decryption"`
+	Fallbacks  []string `json:"fallbacks"`
+}
+
+// AddInboundStreamSettings represents the stream settings for an inbound
+type AddInboundStreamSettings struct {
+	Network         string                    `json:"network"`
+	Security        string                    `json:"security"`
+	ExternalProxy   []string                  `json:"externalProxy"`
+	RealitySettings AddInboundRealitySettings `json:"realitySettings"`
+	TCPSettings     AddInboundTCPSettings     `json:"tcpSettings"`
+}
+
+// AddInboundRealitySettings represents reality-specific stream settings
+type AddInboundRealitySettings struct {
+	Show        bool     `json:"show"`
+	Xver        int      `json:"xver"`
+	Dest        string   `json:"dest"`
+	ServerNames []string `json:"serverNames"`
+	PrivateKey  string   `json:"privateKey"`
+	ShortIDs    []string `json:"shortIds"`
+	Settings    struct {
+		PublicKey   string `json:"publicKey"`
+		Fingerprint string `json:"fingerprint"`
+		ServerName  string `json:"serverName"`
+		SpiderX     string `json:"spiderX"`
+	} `json:"settings"`
+}
+
+// AddInboundTCPSettings represents TCP-specific settings
+type AddInboundTCPSettings struct {
+	AcceptProxyProtocol bool `json:"acceptProxyProtocol"`
+	Header              struct {
+		Type string `json:"type"`
+	} `json:"header"`
+}
+
+// CertificateResponse represents the response from /server/getNewX25519Cert
+type CertificateResponse struct {
+	PrivateKey string `json:"privateKey"`
+	PublicKey  string `json:"publicKey"`
+}
+
+// FetchCertificateResponse wraps the API response
+type FetchCertificateResponse struct {
+	Success bool                `json:"success"`
+	Msg     string              `json:"msg"`
+	Obj     CertificateResponse `json:"obj"`
+}

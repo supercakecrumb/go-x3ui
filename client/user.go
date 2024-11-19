@@ -7,8 +7,8 @@ import (
 	"github.com/google/uuid"
 )
 
-// AddClient adds a new client to the specified inbound
-func (c *Client) AddClient(inboundID int, clientConfig InboundClient) error {
+// AddInboundClient adds a new client to the specified inbound
+func (c *Client) AddInboundClient(inboundID int, clientConfig InboundClient) error {
 	c.Logger.Info("Adding client to inbound", "inboundID", inboundID, "email", clientConfig.Email)
 
 	// Marshal the clients into JSON
@@ -68,4 +68,30 @@ func (c *Client) GenerateDefaultConfig(email string, tgID int64) InboundClient {
 		SubID:      uuid.NewString(),
 		Reset:      0,
 	}
+}
+
+// GetOnlineClients fetches the list of online clients.
+func (c *Client) GetOnlineClients() (OnlinesResponse, error) {
+	c.Logger.Info("Fetching online clients")
+	var response APIResponse[OnlinesResponse]
+
+	// Send the request
+	_, err := c.Resty.R().
+		SetHeader("Accept", "application/json").
+		SetResult(&response).
+		Post("/panel/inbound/onlines")
+
+	if err != nil {
+		c.Logger.Error("Failed to fetch online clients", "error", err)
+		return nil, err
+	}
+
+	// Handle non-success responses
+	if !response.Success {
+		c.Logger.Error("Failed to fetch online clients", "message", response.Msg)
+		return nil, fmt.Errorf("failed to fetch online clients: %s", response.Msg)
+	}
+
+	c.Logger.Info("Successfully fetched online clients")
+	return response.Obj, nil
 }

@@ -34,7 +34,7 @@ func main() {
 		logger.Error("Error listing inbounds:", slog.String("error", err.Error()))
 		return
 	}
-	logger.Info("Inbounds Listed", slog.Any("Inbounds", inbounds))
+	// logger.Info("Inbounds Listed", slog.Any("Inbounds", inbounds))
 
 	onlines, err := c.GetOnlineClients()
 	if err != nil {
@@ -43,15 +43,15 @@ func main() {
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
 
-	// inboundClient := c.GenerateDefaultConfig("test", 1234)
-	// err = c.AddInboundClient(2, inboundClient)
-	// if err != nil {
-	// 	logger.Error("Creating client failed", slog.String("error", err.Error()))
-	// 	return
-	// }
+	inboundClient := c.GenerateDefaultInboundClient("test", 1234)
+	err = c.AddInboundClient(2, inboundClient)
+	if err != nil {
+		logger.Error("Creating client failed", slog.String("error", err.Error()))
+		return
+	}
 
 	// Generate default inbound configuration
-	defaultInbound, err := c.GenerateDefaultInboundConfig("tori.fi", "178.236.244.241", 444)
+	defaultInbound, err := c.GenerateDefaultInboundConfig("testinbound", "tori.fi", "178.236.244.241", 444)
 	if err != nil {
 		logger.Error("Failed to generate default inbound config", "error", err)
 		return
@@ -64,4 +64,10 @@ func main() {
 		return
 	}
 
+	inbound := inbounds[0]
+	link, err := client.GenerateVLESSLink(inbound, "GapInTheIce")
+	if err != nil {
+		logger.Error("error generating vless link", slog.String("error", err.Error()))
+	}
+	logger.Info("vless link", slog.String("link", link))
 }

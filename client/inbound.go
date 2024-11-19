@@ -65,7 +65,7 @@ func (c *Client) AddInbound(payload AddInboundPayload) error {
 	return nil
 }
 
-func (c *Client) GenerateDefaultInboundConfig(realityCover, listenIP string, port int) (AddInboundPayload, error) {
+func (c *Client) GenerateDefaultInboundConfig(remark, realityCover, listenIP string, port int) (AddInboundPayload, error) {
 	// Generate keys
 	// Fetch new certificate
 	cert, err := c.GetNewCertificate()
@@ -137,7 +137,7 @@ func (c *Client) GenerateDefaultInboundConfig(realityCover, listenIP string, por
 		Up:             0,
 		Down:           0,
 		Total:          0,
-		Remark:         "Default Inbound",
+		Remark:         remark,
 		Enable:         true,
 		ExpiryTime:     0,
 		Listen:         listenIP,

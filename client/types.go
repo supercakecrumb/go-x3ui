@@ -26,6 +26,13 @@ type Inbound struct {
 	Allocate       string        `json:"allocate"`
 }
 
+// InboundSettings represents the parsed settings for an inbound
+type InboundSettings struct {
+	Clients    []InboundClient `json:"clients"`
+	Decryption string          `json:"decryption"`
+	Fallbacks  []string        `json:"fallbacks"`
+}
+
 // ClientStats represents individual client statistics within an inbound.
 type ClientStats struct {
 	ID         int    `json:"id"`
@@ -53,7 +60,7 @@ type AddInboundClientConfig struct {
 	Clients []InboundClient `json:"clients"`
 }
 
-// Client represents a single client to be added to an inbound
+// InboundClient represents a single client to be added to an inbound
 type InboundClient struct {
 	ID         string `json:"id"`
 	Flow       string `json:"flow"`

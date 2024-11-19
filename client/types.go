@@ -41,3 +41,28 @@ type ClientStats struct {
 
 // OnlinesResponse represents the `inbound/onlines` response object.
 type OnlinesResponse []string
+
+// AddInboundClientPayload represents the payload for the addClient API
+type AddInboundClientPayload struct {
+	ID       int                    `json:"id"`
+	Settings AddInboundClientConfig `json:"settings"`
+}
+
+// AddInboundClientConfig represents the settings field in the addClient payload
+type AddInboundClientConfig struct {
+	Clients []InboundClient `json:"clients"`
+}
+
+// Client represents a single client to be added to an inbound
+type InboundClient struct {
+	ID         string `json:"id"`
+	Flow       string `json:"flow"`
+	Email      string `json:"email"`
+	LimitIP    int    `json:"limitIp"`
+	TotalGB    int    `json:"totalGB"`
+	ExpiryTime int64  `json:"expiryTime"`
+	Enable     bool   `json:"enable"`
+	TgID       int64  `json:"tgId"`
+	SubID      string `json:"subId"`
+	Reset      int    `json:"reset"`
+}

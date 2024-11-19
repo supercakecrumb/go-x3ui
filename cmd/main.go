@@ -42,4 +42,11 @@ func main() {
 		return
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
+
+	inboundClient := c.GenerateDefaultConfig("test", 1234)
+	err = c.AddClient(2, inboundClient)
+	if err != nil {
+		logger.Error("Creating client failed", slog.String("error", err.Error()))
+		return
+	}
 }

@@ -20,7 +20,6 @@ func (c *Client) Login() error {
 		SetBody(formData.Encode()). // Properly encode form data
 		SetHeader("Accept", "*/*").
 		SetHeader("Connection", "keep-alive").
-		SetOutput("cookies.txt"). // Save cookies to a file (if needed)
 		Post("/login")
 
 	if err != nil {

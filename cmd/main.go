@@ -28,4 +28,18 @@ func main() {
 		return
 	}
 	logger.Info("Login successful!")
+
+	inbounds, err := c.ListInbounds()
+	if err != nil {
+		logger.Error("Error listing inbounds:", slog.String("error", err.Error()))
+		return
+	}
+	logger.Info("Inbounds Listed", slog.Any("Inbounds", inbounds))
+
+	onlines, err := c.GetOnlineClients()
+	if err != nil {
+		logger.Error("Error getting onlines:", slog.String("error", err.Error()))
+		return
+	}
+	logger.Info("Online clients", slog.Any("clients", onlines))
 }

@@ -7,6 +7,7 @@ import (
 )
 
 // GenerateVLESSLink generates a VLESS link for the given inbound and email
+// It was rewritten from 3xui JS script https://github.com/MHSanaei/3x-ui/blob/2ce9c3cc81799b954441e665e9661a20bc69f8c3/web/assets/js/model/inbound.js#L1364
 func GenerateVLESSLink(inbound Inbound, email string) (string, error) {
 	// Parse the settings field to extract the list of clients
 	inboundSettings, err := parseInboundSettings(inbound)

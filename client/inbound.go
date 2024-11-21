@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"time"
 
 	"golang.org/x/exp/rand"
@@ -34,7 +35,7 @@ func (c *Client) ListInbounds() ([]Inbound, error) {
 	return response.Obj, nil
 }
 
-func (c *Client) AddInbound(payload AddInboundPayload) error {
+func (c *Client) AddInbound(payload AddInboundPayload) (*Inbound, error) {
 	c.Logger.Info("Adding inbound", "remark", payload.Remark, "port", payload.Port)
 
 	// Send the request
@@ -45,24 +46,27 @@ func (c *Client) AddInbound(payload AddInboundPayload) error {
 
 	if err != nil {
 		c.Logger.Error("Failed to add inbound", "error", err)
-		return fmt.Errorf("failed to add inbound: %w", err)
+		return nil, fmt.Errorf("failed to add inbound: %w", err)
 	}
 
 	// Unmarshal the response
-	var response APIResponse[interface{}]
+	var response APIResponse[Inbound]
 	if err := json.Unmarshal(resp.Body(), &response); err != nil {
 		c.Logger.Error("Failed to unmarshal response", "error", err, "body", string(resp.Body()))
-		return fmt.Errorf("failed to unmarshal response: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
 	// Handle non-success responses
 	if !response.Success {
 		c.Logger.Error("Add inbound failed", "message", response.Msg)
-		return fmt.Errorf("add inbound failed: %s", response.Msg)
+		return nil, fmt.Errorf("add inbound failed: %s", response.Msg)
 	}
 
-	c.Logger.Info("Inbound successfully added", "remark", payload.Remark, "port", payload.Port)
-	return nil
+	c.Logger.Debug("Inboud Added", slog.Any("Inbound", response.Obj))
+
+	inbound := &response.Obj
+	c.Logger.Info("Inbound successfully added", "id", inbound.ID, "remark", inbound.Remark, "port", inbound.Port)
+	return inbound, nil
 }
 
 func (c *Client) GenerateDefaultInboundConfig(remark, realityCover, listenIP string, port int) (AddInboundPayload, error) {

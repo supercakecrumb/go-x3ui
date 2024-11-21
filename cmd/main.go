@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"log/slog"
+	"os"
 
 	"github.com/supercakecrumb/go-x3ui/client"
 	"github.com/supercakecrumb/go-x3ui/config"
@@ -16,7 +17,7 @@ func main() {
 	}
 
 	// Initialize logger
-	logger := slog.New(slog.NewTextHandler(log.Writer(), nil))
+	logger := newLogger("debug")
 
 	// Initialize client
 	c := client.NewClient(cfg.Server.BaseURL, cfg.Server.Username, cfg.Server.Password, cfg.Server.Insecure, logger)
@@ -43,12 +44,12 @@ func main() {
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
 
-	inboundClient := c.GenerateDefaultInboundClient("test", 1234)
-	err = c.AddInboundClient(2, inboundClient)
-	if err != nil {
-		logger.Error("Creating client failed", slog.String("error", err.Error()))
-		return
-	}
+	// inboundClient := c.GenerateDefaultInboundClient("test", 1234)
+	// err = c.AddInboundClient(2, inboundClient)
+	// if err != nil {
+	// 	logger.Error("Creating client failed", slog.String("error", err.Error()))
+	// 	return
+	// }
 
 	// Generate default inbound configuration
 	defaultInbound, err := c.GenerateDefaultInboundConfig("testinbound", "tori.fi", "178.236.244.241", 444)
@@ -58,7 +59,7 @@ func main() {
 	}
 
 	// Add the inbound
-	err = c.AddInbound(defaultInbound)
+	_, err = c.AddInbound(defaultInbound)
 	if err != nil {
 		logger.Error("Failed to add inbound", "error", err)
 		return
@@ -70,4 +71,19 @@ func main() {
 		logger.Error("error generating vless link", slog.String("error", err.Error()))
 	}
 	logger.Info("vless link", slog.String("link", link))
+}
+
+func newLogger(level string) *slog.Logger {
+	var logLevel slog.Level
+	switch level {
+	case "debug":
+		logLevel = slog.LevelDebug
+	case "info":
+		logLevel = slog.LevelInfo
+	default:
+		logLevel = slog.LevelDebug
+	}
+
+	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: logLevel})
+	return slog.New(handler)
 }

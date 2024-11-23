@@ -22,13 +22,15 @@ func main() {
 	// Initialize client
 	c := client.NewClient(cfg.Server.BaseURL, cfg.Server.Username, cfg.Server.Password, cfg.Server.Insecure, logger)
 
-	// Perform login
-	logger.Info("Logging in...")
-	if err := c.Login(); err != nil {
-		logger.Error("Login failed", slog.String("error", err.Error()))
-		return
-	}
-	logger.Info("Login successful!")
+	// // Perform login
+	// logger.Info("Logging in...")
+	// if err := c.Login(); err != nil {
+	// 	logger.Error("Login failed", slog.String("error", err.Error()))
+	// 	return
+	// }
+	// logger.Info("Login successful!")
+
+	// spew.Dump(c.Resty.GetClient().Jar)
 
 	inbounds, err := c.ListInbounds()
 	if err != nil {
@@ -44,12 +46,12 @@ func main() {
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
 
-	// inboundClient := c.GenerateDefaultInboundClient("test", 1234)
-	// err = c.AddInboundClient(2, inboundClient)
-	// if err != nil {
-	// 	logger.Error("Creating client failed", slog.String("error", err.Error()))
-	// 	return
-	// }
+	inboundClient := c.GenerateDefaultInboundClient("testtt", 1234)
+	err = c.AddInboundClient(2, inboundClient)
+	if err != nil {
+		logger.Error("Creating client failed", slog.String("error", err.Error()))
+		return
+	}
 
 	// Generate default inbound configuration
 	defaultInbound, err := c.GenerateDefaultInboundConfig("testinbound", "tori.fi", "178.236.244.241", 444)

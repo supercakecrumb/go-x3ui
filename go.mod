@@ -3,6 +3,7 @@ module github.com/supercakecrumb/go-x3ui
 go 1.23.3
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-resty/resty/v2 v2.16.0
 	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f
 )

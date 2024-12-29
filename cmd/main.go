@@ -37,7 +37,7 @@ func main() {
 		logger.Error("Error listing inbounds:", slog.String("error", err.Error()))
 		return
 	}
-	// logger.Info("Inbounds Listed", slog.Any("Inbounds", inbounds))
+	logger.Info("Inbounds Listed", slog.Any("Inbounds", inbounds))
 
 	onlines, err := c.GetOnlineClients()
 	if err != nil {
@@ -46,26 +46,26 @@ func main() {
 	}
 	logger.Info("Online clients", slog.Any("clients", onlines))
 
-	inboundClient := c.GenerateDefaultInboundClient("testtt", 1234)
-	err = c.AddInboundClient(2, inboundClient)
-	if err != nil {
-		logger.Error("Creating client failed", slog.String("error", err.Error()))
-		return
-	}
+	// inboundClient := c.GenerateDefaultInboundClient("testtt", 1234)
+	// err = c.AddInboundClient(2, inboundClient)
+	// if err != nil {
+	// 	logger.Error("Creating client failed", slog.String("error", err.Error()))
+	// 	return
+	// }
 
-	// Generate default inbound configuration
-	defaultInbound, err := c.GenerateDefaultInboundConfig("testinbound", "tori.fi", "178.236.244.241", 444)
-	if err != nil {
-		logger.Error("Failed to generate default inbound config", "error", err)
-		return
-	}
+	// // Generate default inbound configuration
+	// defaultInbound, err := c.GenerateDefaultInboundConfig("testinbound", "tori.fi", "178.236.244.241", 444)
+	// if err != nil {
+	// 	logger.Error("Failed to generate default inbound config", "error", err)
+	// 	return
+	// }
 
-	// Add the inbound
-	_, err = c.AddInbound(defaultInbound)
-	if err != nil {
-		logger.Error("Failed to add inbound", "error", err)
-		return
-	}
+	// // Add the inbound
+	// _, err = c.AddInbound(defaultInbound)
+	// if err != nil {
+	// 	logger.Error("Failed to add inbound", "error", err)
+	// 	return
+	// }
 
 	inbound := inbounds[0]
 	link, err := client.GenerateVLESSLink(inbound, "GapInTheIce")
